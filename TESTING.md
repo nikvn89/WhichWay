@@ -28,7 +28,20 @@ This covers production TypeScript/build, frozen-source parity, 16 Unicode/Python
 - BoundDirection leak gate: **NO LEAK / PASS**
 - `tsc -b && vite build`: **exit 0**
 - Production preview HTML and JavaScript asset: **HTTP 200**
-- Live signed transactions: **NOT RUN here** — MetaMask ownership and user signatures are required; use the seven-step table below.
+- Live signed transactions: **7/7 PASS** using the two documented MetaMask wallets on 2026-10-01.
+
+## Verified live run — 2026-10-01
+
+- Bound A (`FLOOR`): `44b5b66e2cf0052efaa829d2c68a840095064f8c72f5208d4d4ea8ee399309dc`
+- Bound A reading `250`: `WITHIN`
+- Bound A reading `249`: `BREACH`
+- Bound A reading #2 dispute: `Source reading is contested.`
+- Bound B (`CEILING`): `7be57770e84bbfe679d743114bebca32d218e048e00925e4d0907d26beaefe70`
+- Bound B reading `249`: `WITHIN`
+- Compare at `249`: Bound A `BREACH`; Bound B `WITHIN`
+- Ambiguous position text: request rejected and no third accepted bound created
+
+The wallet/RPC path shortened the ambiguous rollback to `The request could not be completed.` The fail-closed result was verified by the absence of a third bound in accepted state; the frontend does not substitute a fabricated contract reason.
 
 ## Seven frontend transactions
 
@@ -48,7 +61,7 @@ Run in this order after deploying the exact frozen source. Save every transactio
 
 1. Compare mode with bound A and B, reading `249`: one red `BREACH`, one green `WITHIN`, with both full operator sentences visible.
 2. Bound A ledger showing `250 → WITHIN`, `249 → BREACH`, and the other-side note on row #2.
-3. The ambiguous open-bound error banner showing the exact rollback reason; loading its computed ID must find no accepted bound.
+3. The ambiguous open-bound failure banner with the original input visible and only the two valid IDs present; no third accepted bound is created.
 
 ## What this run does not prove
 

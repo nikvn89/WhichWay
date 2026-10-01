@@ -6,6 +6,8 @@ WhichWay does not ask whether a number is good enough, and it does not grade any
 
 - Network: GenLayer StudioNet (`61999`)
 - Contract: [`0xB47fA3bA69E42ef362232C3bBF227588FC78eC5B`](https://explorer-studio.genlayer.com/address/0xB47fA3bA69E42ef362232C3bBF227588FC78eC5B)
+- Live app: https://which-way-zeta.vercel.app
+- Repository: https://github.com/nikvn89/WhichWay
 - SDK: `genlayer-js 1.1.8`
 - Frozen source SHA-256: `9aef694bb65c030ca2981a47110bd0f446db0422f62ad7d2e60e3ffa5e39ed42`
 
@@ -37,7 +39,23 @@ Use two wallets to exercise the complete workflow. The form deliberately starts 
 4. Switch back to the author wallet and open a ceiling bound with the same amount and text: `The agreed figure is the most we will provide.`
 5. Record `249`; it should be `WITHIN`.
 6. Load both IDs in Compare, enter `249`, and observe opposite results produced from accepted contract state.
-7. Submit `The agreed figure applies to this work.` as a new bound. The transaction should fail closed with `The direction of the bound could not be read from the text`, and the computed ID should not resolve to a record.
+7. Submit `The agreed figure applies to this work.` as a new bound. The contract rejects the ambiguous direction and creates no accepted record. Some wallet/RPC paths shorten the rollback reason to a generic failure banner, so confirm that no third bound appears.
+
+## Verified StudioNet run
+
+The complete two-wallet flow was executed against the fixed deployment on 2026-10-01.
+
+### Same reading, opposite operators
+
+![FLOOR returns BREACH while CEILING returns WITHIN for reading 249](./docs/screenshots/compare-floor-ceiling.png)
+
+### Immutable other-side dispute
+
+![Bound A ledger with WITHIN, BREACH and the other-side dispute note](./docs/screenshots/bound-a-dispute.png)
+
+### Ambiguous text fails closed
+
+![Ambiguous position text is rejected without creating a third bound](./docs/screenshots/ambiguous-rollback.png)
 
 ## Safety and honest limitations
 
